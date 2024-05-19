@@ -23,7 +23,7 @@ function App() {
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/analyst/*" element={<AnalystLayout />} />
           <Route path="/user/*" element={<UserLayout />} />
-          <Route path="/*" element={<AdminLayout />} /> {/* Default to UserLayout */}
+          <Route path="/*" element={<UserLayout />} /> {/* Default to UserLayout */}
         </Routes>
       </div>
     </Router>

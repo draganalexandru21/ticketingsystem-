@@ -38,14 +38,6 @@ const EmployeeTicketDetail = () => {
             formData.append('attachment', attachment);
         }
 
-        // Exemple de trimitere a datelor (folosind fetch sau axios)
-        // fetch('/api/tickets/${id}/messages', {
-        //     method: 'POST',
-        //     body: formData,
-        // }).then(response => response.json())
-        //   .then(data => console.log(data))
-        //   .catch(error => console.error('Error:', error));
-
         console.log("Mesaj trimis: ", message, attachment ? `cu atașament: ${attachment.name}` : "fără atașament");
         setMessage(""); // Resetați inputul după trimitere
         setAttachment(null); // Resetați atașamentul după trimitere
