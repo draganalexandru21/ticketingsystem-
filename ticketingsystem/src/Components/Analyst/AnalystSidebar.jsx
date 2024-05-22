@@ -18,6 +18,9 @@ const AnalystSidebar = () => {
                 <NavLink to="/analyst/insights" className="btn btn-light w-100 mb-3" activeClassName="active-link" exact>
                     <i className="fas fa-chart-line"></i> Insights
                 </NavLink>
+                <NavLink to="/analyst/mails" className="btn btn-light w-100 mb-3" activeClassName="active-link" exact>
+                    <i className="fas fa-envelope"></i> Mails
+                </NavLink>
             </div>
 
             <div className="mt-auto p-2">

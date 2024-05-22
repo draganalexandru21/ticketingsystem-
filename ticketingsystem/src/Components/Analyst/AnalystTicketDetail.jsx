@@ -10,7 +10,8 @@ const AnalystTicketDetail = () => {
     const ticketDetails = {
         id: id,
         title: 'Review Ticket 1',
-        employee: 'Employee1',
+        owner: 'Employee1',
+        analyst: 'Analyst1',
         status: 'Deschis',
         summary: 'Review the ticket for the laptop issue.',
         dateOpened: '2022-07-14',
@@ -41,14 +42,6 @@ const AnalystTicketDetail = () => {
             formData.append('attachment', attachment);
         }
 
-        // Exemple de trimitere a datelor (folosind fetch sau axios)
-        // fetch('/api/tickets/${id}/messages', {
-        //     method: 'POST',
-        //     body: formData,
-        // }).then(response => response.json())
-        //   .then(data => console.log(data))
-        //   .catch(error => console.error('Error:', error));
-
         console.log("Mesaj trimis: ", message, attachment ? `cu atașament: ${attachment.name}` : "fără atașament");
         setMessage(""); // Resetați inputul după trimitere
         setAttachment(null); // Resetați atașamentul după trimitere
@@ -63,13 +56,16 @@ const AnalystTicketDetail = () => {
             <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <div>Detalii Tichet #{ticketDetails.id}</div>
-                    <div className="badge bg-primary">Prioritate: {ticketDetails.priority}</div>
+                    <div>
+                        <span className="badge bg-primary me-2">Proprietar: {ticketDetails.owner}</span>
+                        <span className="badge bg-primary me-2">Analyst: {ticketDetails.analyst}</span>
+                        <span className="badge bg-primary">Prioritate: {ticketDetails.priority}</span>
+                    </div>
                 </div>
                 <div className="card-body">
                     <h5 className="card-title">{ticketDetails.title}</h5>
                     <p className="card-text">{ticketDetails.summary}</p>
                     <p className="card-text">Status: {ticketDetails.status}</p>
-                    <p className="card-text">Employee: {ticketDetails.employee}</p>
                     <p className="card-text"><strong>Details:</strong> {ticketDetails.details}</p>
                     <p className="card-text"><strong>Comments:</strong> {ticketDetails.comments}</p>
                     <p className="card-text"><small className="text-muted">Deschis la: {ticketDetails.dateOpened}</small></p>

@@ -14,6 +14,8 @@ import AnalystTickets from './Components/Analyst/AnalystTickets';
 import AnalystTicketDetail from './Components/Analyst/AnalystTicketDetail';
 import AnalystDashboard from './Components/Analyst/AnalystDashboard';
 import AnalystInsight from './Components/Analyst/AnalystInsight';
+import AnalystMails from './Components/Analyst/AnalystMails';
+import EmployeeMails from './Components/User/EmployeeMails';
 
 function App() {
   return (
@@ -23,7 +25,7 @@ function App() {
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/analyst/*" element={<AnalystLayout />} />
           <Route path="/user/*" element={<UserLayout />} />
-          <Route path="/*" element={<UserLayout    />} /> {/* Default to UserLayout */}
+          <Route path="/*" element={<UserLayout />} /> {/* Default to UserLayout */}
         </Routes>
       </div>
     </Router>
@@ -38,6 +40,7 @@ const UserLayout = () => (
         <Route path="submit" element={<EmployeeSubmit />} />
         <Route path="tickets" element={<EmployeeTickets />} />
         <Route path="ticket/:id" element={<EmployeeTicketDetail />} />
+        <Route path="mails" element={<EmployeeMails />} />
       </Routes>
     </div>
   </div>
@@ -65,6 +68,7 @@ const AnalystLayout = () => (
         <Route path="tickets" element={<AnalystTickets />} />
         <Route path="ticket/:id" element={<AnalystTicketDetail />} />
         <Route path="insights" element={<AnalystInsight />} />
+        <Route path="mails" element={<AnalystMails />} />
       </Routes>
     </div>
   </div>

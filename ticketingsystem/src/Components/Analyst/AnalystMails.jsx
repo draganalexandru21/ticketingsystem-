@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './EmployeeMails.css';
+import './AnalystMails.css';
 
-const EmployeeMails = () => {
+const AnalystMails = () => {
     const navigate = useNavigate();
 
     // Simulăm notificările, în practică acestea ar veni de la server
     const initialNotifications = [
         { id: 1, ticketId: 1, message: 'Your ticket has been updated', date: '2022-07-15', opened: false },
-        { id: 2, ticketId: 2, message: 'New message from Analyst', date: '2022-07-16', opened: false },
+        { id: 2, ticketId: 2, message: 'New message from Employee', date: '2022-07-16', opened: false },
         { id: 3, ticketId: 3, message: 'Your ticket has been closed', date: '2022-07-17', opened: true },
     ];
 
@@ -20,7 +20,7 @@ const EmployeeMails = () => {
             notification.id === notificationId ? { ...notification, opened: true } : notification
         ));
         // Navighează la detaliile tichetului
-        navigate(`/user/ticket/${ticketId}`);
+        navigate(`/analyst/ticket/${ticketId}`);
     };
 
     // Sortăm notificările astfel încât cele nedeschise să fie primele
@@ -51,4 +51,4 @@ const EmployeeMails = () => {
     );
 };
 
-export default EmployeeMails;
+export default AnalystMails;

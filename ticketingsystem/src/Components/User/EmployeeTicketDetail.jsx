@@ -10,6 +10,7 @@ const EmployeeTicketDetail = () => {
     const ticketDetails = {
         id: id,
         title: 'Laptop nu porneste',
+        owner: 'Employee1',
         analyst: "Analyst1",
         status: 'Deschis',
         summary: 'Laptop-ul model XYZ nu se aprinde de la buton.',
@@ -49,13 +50,16 @@ const EmployeeTicketDetail = () => {
             <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <div>Detalii Tichet #{ticketDetails.id}</div>
-                    <div className="badge bg-primary">Prioritate: {ticketDetails.priority}</div>
+                    <div>
+                        <span className="badge bg-primary me-2">Proprietar: {ticketDetails.owner}</span>
+                        <span className="badge bg-primary me-2">Analyst: {ticketDetails.analyst}</span>
+                        <span className="badge bg-primary">Prioritate: {ticketDetails.priority}</span>
+                    </div>
                 </div>
                 <div className="card-body">
                     <h5 className="card-title">{ticketDetails.title}</h5>
                     <p className="card-text">{ticketDetails.summary}</p>
                     <p className="card-text">Status: {ticketDetails.status}</p>
-                    <p className="card-text">Analyst: {ticketDetails.analyst}</p>
                     <p className="card-text"><small className="text-muted">Deschis la: {ticketDetails.dateOpened}</small></p>
                     <hr />
                     <h6 className="card-title">Conversație:</h6>
