@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import UserSidebar from './Components/User/UserSidebar';
 import EmployeeSubmit from './Components/User/EmployeeSubmit';
 import EmployeeTickets from './Components/User/EmployeeTickets';
@@ -16,6 +16,7 @@ import AnalystDashboard from './Components/Analyst/AnalystDashboard';
 import AnalystInsight from './Components/Analyst/AnalystInsight';
 import AnalystMails from './Components/Analyst/AnalystMails';
 import EmployeeMails from './Components/User/EmployeeMails';
+import LoginForm from './Components/LoginForm/LoginForm';
 
 function App() {
   return (
@@ -25,7 +26,9 @@ function App() {
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/analyst/*" element={<AnalystLayout />} />
           <Route path="/user/*" element={<UserLayout />} />
-          <Route path="/*" element={<UserLayout />} /> {/* Default to UserLayout */}
+          <Route path="/login/*" element={<LoginForm />} />
+          <Route path="/*" element={<LoginForm/>} />
+
         </Routes>
       </div>
     </Router>
