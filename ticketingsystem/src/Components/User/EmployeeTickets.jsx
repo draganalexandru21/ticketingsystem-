@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 const EmployeeTickets = () => {
     const navigate = useNavigate();
-    
+
     // Aici veți prelua lista de tichete, pentru simulare vom folosi un array static
     const tickets = [
-        { id: 1, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14' },
-        { id: 2, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15' },
-        { id: 3, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14' },
-        { id: 4, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15' },
-        { id: 5, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14' },
-        { id: 6, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15' },
+        { id: 1, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14', priority: 3 },
+        { id: 2, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15', priority: 2 },
+        { id: 3, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14', priority: 1 },
+        { id: 4, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15', priority: 4 },
+        { id: 5, title: 'Laptop nu porneste', analyst: "Analyst1", status: 'Deschis', summary: 'Laptop-ul model XYZ nu se aprinde de la buton.', dateOpened: '2022-07-14', priority: 5 },
+        { id: 6, title: 'Eroare VPN', analyst: "Analyst2", status: 'In curs', summary: 'Conexiunea VPN se deconecteaza frecvent.', dateOpened: '2022-07-15', priority: 3 },
     ];
 
     const handleDetail = (ticketId) => {
@@ -24,8 +24,9 @@ const EmployeeTickets = () => {
             <div className="tickets-list">
                 {tickets.map((ticket) => (
                     <div key={ticket.id} className="card mb-3">
-                        <div className="card-header">
-                            Tichet #{ticket.id} - {ticket.status}
+                        <div className="card-header d-flex justify-content-between align-items-center">
+                            <div>Tichet #{ticket.id} - {ticket.status}</div>
+                            <div className="badge bg-primary">Prioritate: {ticket.priority}</div>
                         </div>
                         <div className="card-body">
                             <h5 className="card-title">{ticket.title}</h5>

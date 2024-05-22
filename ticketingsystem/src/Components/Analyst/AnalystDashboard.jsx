@@ -3,7 +3,7 @@ import { Line, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 const AnalystDashboard = () => {
-    // Simulăm datele tichetelor, limitate la 5 tichete, în practică acestea ar veni de la server
+    
     const tickets = [
         { id: 1, status: 'Deschis' },
         { id: 2, status: 'Inchis' },

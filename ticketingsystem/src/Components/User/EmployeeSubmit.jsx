@@ -1,11 +1,12 @@
-// EmployeeSubmitTicket.jsx
 import React, { useState } from 'react';
 
 const EmployeeSubmit = () => {
-     const [ticket, setTicket] = useState({
+    const [ticket, setTicket] = useState({
         title: '',
         type: 'Hardware', // Presupunem că "Hardware" este valoarea implicită
         details: '',
+        priority: 1, // Presupunem că 1 este valoarea implicită
+        attachment: null, // Starea pentru atașament
     });
 
     const handleChange = (e) => {
@@ -16,10 +17,23 @@ const EmployeeSubmit = () => {
         });
     };
 
+    const handleAttachmentChange = (e) => {
+        setTicket({
+            ...ticket,
+            attachment: e.target.files[0],
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        for (const key in ticket) {
+            formData.append(key, ticket[key]);
+        }
+
         // Aici s-ar adăuga logica pentru a trimite datele către backend
         console.log(ticket);
+        console.log("Atașament: ", ticket.attachment ? ticket.attachment.name : "Niciun atașament");
     };
 
     return (
@@ -53,6 +67,23 @@ const EmployeeSubmit = () => {
                     </select>
                 </div>
                 <div className="mb-3">
+                    <label htmlFor="priority" className="form-label">Priority</label>
+                    <select 
+                        className="form-select" 
+                        id="priority" 
+                        name="priority" 
+                        value={ticket.priority} 
+                        onChange={handleChange} 
+                        required
+                    >
+                        <option value={1}>1 - Low</option>
+                        <option value={2}>2 - Medium</option>
+                        <option value={3}>3 - High</option>
+                        <option value={4}>4 - Urgent</option>
+                        <option value={5}>5 - Critical</option>
+                    </select>
+                </div>
+                <div className="mb-3">
                     <label htmlFor="details" className="form-label">Details</label>
                     <textarea 
                         className="form-control" 
@@ -63,6 +94,16 @@ const EmployeeSubmit = () => {
                         rows="5" 
                         required 
                     ></textarea>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="attachment" className="form-label">Attachment</label>
+                    <input 
+                        className="form-control" 
+                        type="file" 
+                        id="attachment" 
+                        name="attachment"
+                        onChange={handleAttachmentChange}
+                    />
                 </div>
                 <button type="submit" className="btn btn-primary">Submit Ticket</button>
             </form>

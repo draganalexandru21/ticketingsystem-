@@ -16,6 +16,7 @@ const AnalystTicketDetail = () => {
         dateOpened: '2022-07-14',
         details: 'Laptop-ul model XYZ nu se aprinde de la buton. Se recomandă verificarea alimentării și a bateriei.',
         comments: 'Comentarii adiționale: Verifică și cablurile de alimentare.',
+        priority: 3,
         conversation: [
             { from: "Employee1", message: "Buna ziua, am o problema cu laptopul.", timestamp: '2022-07-14 10:00', attachment: null },
             { from: "Analyst1", message: "Buna ziua, am primit mesajul dumneavoastră.", timestamp: '2022-07-14 10:05', attachment: 'report.pdf' },
@@ -60,8 +61,9 @@ const AnalystTicketDetail = () => {
     return (
         <div className="container mt-4">
             <div className="card">
-                <div className="card-header">
-                    Detalii Tichet #{ticketDetails.id}
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <div>Detalii Tichet #{ticketDetails.id}</div>
+                    <div className="badge bg-primary">Prioritate: {ticketDetails.priority}</div>
                 </div>
                 <div className="card-body">
                     <h5 className="card-title">{ticketDetails.title}</h5>

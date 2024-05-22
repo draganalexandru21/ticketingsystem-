@@ -14,6 +14,7 @@ const EmployeeTicketDetail = () => {
         status: 'Deschis',
         summary: 'Laptop-ul model XYZ nu se aprinde de la buton.',
         dateOpened: '2022-07-14',
+        priority: 3,
         conversation: [
             { from: "Employee", message: "Buna ziua, am o problema cu laptopul.", timestamp: '2022-07-14 10:00', attachment: null },
             { from: "Analyst1", message: "Buna ziua, am primit mesajul dumneavoastră.", timestamp: '2022-07-14 10:05', attachment: 'diagnostic_report.pdf' },
@@ -46,8 +47,9 @@ const EmployeeTicketDetail = () => {
     return (
         <div className="container mt-4">
             <div className="card">
-                <div className="card-header">
-                    Detalii Tichet #{ticketDetails.id}
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <div>Detalii Tichet #{ticketDetails.id}</div>
+                    <div className="badge bg-primary">Prioritate: {ticketDetails.priority}</div>
                 </div>
                 <div className="card-body">
                     <h5 className="card-title">{ticketDetails.title}</h5>
