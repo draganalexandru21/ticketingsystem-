@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './LoginForm.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -16,20 +17,18 @@ const LoginForm = () => {
         },
         body: JSON.stringify({ mail: email, password }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Server response:', errorData);
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await response.json();
-      // Assuming data contains a token and user role
       localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.role); // Salvează rolul utilizatorului
+      localStorage.setItem('role', data.role);
       const userRole = data.role;
-  
-      // Redirect based on user role
+
       if (userRole === 'ADMIN') {
         navigate('/admin/users');
       } else if (userRole === 'ANALYST') {
@@ -43,10 +42,10 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="login-container d-flex align-items-center justify-content-center">
+    <div className="login-container">
       <div className="card login-card">
         <div className="card-header text-center">
-          <h3 className="text-dark">Log in</h3>
+          <h3 className="text-primary">Log in</h3>
         </div>
         <div className="card-body">
           <form onSubmit={handleLogin}>

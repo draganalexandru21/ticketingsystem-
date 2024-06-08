@@ -45,7 +45,7 @@
 }
 
 .text-white {
-    color: rgb(0, 0, 0) !important;
+    color: #ffffff !important;
 }
 
 .text-center a {
@@ -59,4 +59,8 @@
 
 .forgot-password-link {
     color: #5c5454; /* Same as .py-custom background color */
+}
+
+.btn {
+    margin-top: 15px; /* Add margin-top to the button */
 }
