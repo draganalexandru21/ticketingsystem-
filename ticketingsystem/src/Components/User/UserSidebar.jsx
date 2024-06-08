@@ -1,9 +1,16 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './UserSidebar.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const UserSidebar = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
     return (
         <div className="d-flex flex-column vh-100 sidebar">
             <div className="text-white text-center py-custom">Employee Panel</div>
@@ -21,9 +28,9 @@ const UserSidebar = () => {
             </div>
 
             <div className="mt-auto p-2">
-                <NavLink to="/logout" className="btn bg-secondary text-white w-100">
+                <button onClick={handleLogout} className="btn bg-secondary text-white w-100">
                     <i className="fas fa-sign-out-alt"></i> Log Out
-                </NavLink>
+                </button>
             </div>
         </div>
     );

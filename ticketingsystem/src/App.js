@@ -17,18 +17,18 @@ import AnalystInsight from './Components/Analyst/AnalystInsight';
 import AnalystMails from './Components/Analyst/AnalystMails';
 import EmployeeMails from './Components/User/EmployeeMails';
 import LoginForm from './Components/LoginForm/LoginForm';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/analyst/*" element={<AnalystLayout />} />
           <Route path="/user/*" element={<UserLayout />} />
-          <Route path="/login/*" element={<LoginForm />} />
-          <Route path="/*" element={<LoginForm/>} />
-
+          <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
@@ -40,10 +40,10 @@ const UserLayout = () => (
     <UserSidebar />
     <div className="flex-grow-1 p-3">
       <Routes>
-        <Route path="submit" element={<EmployeeSubmit />} />
-        <Route path="tickets" element={<EmployeeTickets />} />
-        <Route path="ticket/:id" element={<EmployeeTicketDetail />} />
-        <Route path="mails" element={<EmployeeMails />} />
+        <Route path="submit" element={<PrivateRoute element={EmployeeSubmit} allowedRoles={['EMPLOYEE']} />} />
+        <Route path="tickets" element={<PrivateRoute element={EmployeeTickets} allowedRoles={['EMPLOYEE']} />} />
+        <Route path="ticket/:id" element={<PrivateRoute element={EmployeeTicketDetail} allowedRoles={['EMPLOYEE']} />} />
+        <Route path="mails" element={<PrivateRoute element={EmployeeMails} allowedRoles={['EMPLOYEE']} />} />
       </Routes>
     </div>
   </div>
@@ -54,9 +54,9 @@ const AdminLayout = () => (
     <AdminSidebar />
     <div className="flex-grow-1 p-3">
       <Routes>
-        <Route path="users" element={<AdminManageUser />} />
-        <Route path="add-user" element={<AdminAddUser />} />
-        <Route path="edit-user/:id" element={<AdminEditUser />} />
+        <Route path="users" element={<PrivateRoute element={AdminManageUser} allowedRoles={['ADMIN']} />} />
+        <Route path="add-user" element={<PrivateRoute element={AdminAddUser} allowedRoles={['ADMIN']} />} />
+        <Route path="edit-user/:id" element={<PrivateRoute element={AdminEditUser} allowedRoles={['ADMIN']} />} />
       </Routes>
     </div>
   </div>
@@ -67,11 +67,11 @@ const AnalystLayout = () => (
     <AnalystSidebar />
     <div className="flex-grow-1 p-3">
       <Routes>
-        <Route path="dashboard" element={<AnalystDashboard />} />
-        <Route path="tickets" element={<AnalystTickets />} />
-        <Route path="ticket/:id" element={<AnalystTicketDetail />} />
-        <Route path="insights" element={<AnalystInsight />} />
-        <Route path="mails" element={<AnalystMails />} />
+        <Route path="dashboard" element={<PrivateRoute element={AnalystDashboard} allowedRoles={['ANALYST']} />} />
+        <Route path="tickets" element={<PrivateRoute element={AnalystTickets} allowedRoles={['ANALYST']} />} />
+        <Route path="ticket/:id" element={<PrivateRoute element={AnalystTicketDetail} allowedRoles={['ANALYST']} />} />
+        <Route path="insights" element={<PrivateRoute element={AnalystInsight} allowedRoles={['ANALYST']} />} />
+        <Route path="mails" element={<PrivateRoute element={AnalystMails} allowedRoles={['ANALYST']} />} />
       </Routes>
     </div>
   </div>
