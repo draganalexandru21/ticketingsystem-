@@ -14,7 +14,7 @@ const AdminManageUsers = () => {
                     navigate('/login');
                     return;
                 }
-                
+
                 console.log("Sending JWT Token: ", token); // Log the token being sent
 
                 const response = await axios.get('http://localhost:8080/api/v1/users', {
@@ -52,6 +52,12 @@ const AdminManageUsers = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return isNaN(date) ? 'Invalid Date' : date.toLocaleString();
+    };
+
     return (
         <div className="container mt-4">
             <h2>Manage Users</h2>
@@ -76,8 +82,8 @@ const AdminManageUsers = () => {
                             <td>{user.mail}</td>
                             <td>{user.role}</td>
                             <td>{user.active ? "Yes" : "No"}</td>
-                            <td>{new Date(user.createdAt).toLocaleString()}</td>
-                            <td>{user.updatedAt ? new Date(user.updatedAt).toLocaleString() : '-'}</td>
+                            <td>{formatDate(user.createdDate)}</td>
+                            <td>{formatDate(user.updatedDate)}</td>
                             <td>
                                 <button className="btn btn-primary me-2" onClick={() => handleEdit(user)} disabled={user.role === 'ADMIN'}>Edit</button>
                                 <button className="btn btn-danger" onClick={() => handleDelete(user.mail)} disabled={user.role === 'ADMIN'}>Delete</button>
