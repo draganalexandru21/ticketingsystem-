@@ -6,7 +6,7 @@ import EmployeeSubmit from './Components/User/EmployeeSubmit';
 import EmployeeTickets from './Components/User/EmployeeTickets';
 import EmployeeTicketDetail from './Components/User/EmployeeTicketDetail';
 import AdminSidebar from './Components/Admin/AdminSidebar';
-import AdminManageUser from './Components/Admin/AdminManageUser';
+import AdminManageUsers from './Components/Admin/AdminManageUser';
 import AdminEditUser from './Components/Admin/AdminEditUser';
 import AdminAddUser from './Components/Admin/AdminAddUser';
 import AnalystSidebar from './Components/Analyst/AnalystSidebar';
@@ -17,7 +17,7 @@ import AnalystInsight from './Components/Analyst/AnalystInsight';
 import AnalystMails from './Components/Analyst/AnalystMails';
 import EmployeeMails from './Components/User/EmployeeMails';
 import LoginForm from './Components/LoginForm/LoginForm';
-import PrivateRoute from './routes/PrivateRoute.jsx';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   return (
@@ -54,9 +54,9 @@ const AdminLayout = () => (
     <AdminSidebar />
     <div className="flex-grow-1 p-3">
       <Routes>
-        <Route path="users" element={<PrivateRoute element={AdminManageUser} allowedRoles={['ADMIN']} />} />
+        <Route path="users" element={<PrivateRoute element={AdminManageUsers} allowedRoles={['ADMIN']} />} />
         <Route path="add-user" element={<PrivateRoute element={AdminAddUser} allowedRoles={['ADMIN']} />} />
-        <Route path="edit-user/:id" element={<PrivateRoute element={AdminEditUser} allowedRoles={['ADMIN']} />} />
+        <Route path="edit-user" element={<PrivateRoute element={AdminEditUser} allowedRoles={['ADMIN']} />} />
       </Routes>
     </div>
   </div>

@@ -1,50 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './AdminManageUser.css'; // CSS personalizat pentru această componentă
 
-const AdminManageUser = () => {
+const AdminManageUsers = () => {
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
-    // Date simulate pentru utilizatori
-    const users = [
-        { id: 1, username: 'User1', email: 'user1@example.com', password: '*******', role: 'Analyst' },
-        { id: 2, username: 'User2', email: 'user2@example.com', password: '*******', role: 'Employee' },
-        { id: 3, username: 'User3', email: 'user3@example.com', password: '*******', role: 'Analyst' },
-        { id: 4, username: 'User4', email: 'user4@example.com', password: '*******', role: 'Employee' },
-        { id: 5, username: 'User5', email: 'user5@example.com', password: '*******', role: 'Analyst' },
-        { id: 6, username: 'User6', email: 'user6@example.com', password: '*******', role: 'Employee' },
-        { id: 7, username: 'User7', email: 'user7@example.com', password: '*******', role: 'Analyst' },
-    ];
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    navigate('/login');
+                    return;
+                }
+                
+                console.log("Sending JWT Token: ", token); // Log the token being sent
 
-    const handleEdit = (userId) => {
-        navigate(`/admin/edit-user/${userId}`);
+                const response = await axios.get('http://localhost:8080/api/v1/users', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setUsers(response.data);
+            } catch (error) {
+                console.error("There was an error fetching the users!", error);
+                if (error.response && error.response.status === 403) {
+                    navigate('/login');
+                }
+            }
+        };
+
+        fetchUsers();
+    }, [navigate]);
+
+    const handleEdit = (user) => {
+        navigate('/admin/edit-user', { state: { user } });
+    };
+
+    const handleDelete = async (mail) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:8080/api/v1/deleteUser/${mail}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setUsers(users.filter(u => u.mail !== mail));
+        } catch (error) {
+            console.error("There was an error deleting the user!", error);
+        }
     };
 
     return (
-        <div className="admin-manage-user-container">
+        <div className="container mt-4">
             <h2>Manage Users</h2>
-            <table className="table">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Password</th>
                         <th>Role</th>
+                        <th>Active</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user) => (
+                    {users.map(user => (
                         <tr key={user.id}>
                             <td>{user.id}</td>
                             <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.password}</td>
+                            <td>{user.mail}</td>
                             <td>{user.role}</td>
+                            <td>{user.active ? "Yes" : "No"}</td>
+                            <td>{new Date(user.createdAt).toLocaleString()}</td>
+                            <td>{user.updatedAt ? new Date(user.updatedAt).toLocaleString() : '-'}</td>
                             <td>
-                                <button className="btn edit" onClick={() => handleEdit(user.id)}>Edit</button>
-                                <button className="btn delete">Delete</button>
+                                <button className="btn btn-primary me-2" onClick={() => handleEdit(user)} disabled={user.role === 'ADMIN'}>Edit</button>
+                                <button className="btn btn-danger" onClick={() => handleDelete(user.mail)} disabled={user.role === 'ADMIN'}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -54,4 +90,4 @@ const AdminManageUser = () => {
     );
 };
 
-export default AdminManageUser;
+export default AdminManageUsers;

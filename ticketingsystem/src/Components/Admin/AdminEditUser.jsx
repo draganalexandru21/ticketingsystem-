@@ -1,74 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './AdminEditUser.css'; // Asigurați-vă că stilurile nu intră în conflict cu Bootstrap
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AdminEditUser = () => {
-  const { id } = useParams();
-  const [user, setUser] = useState({
-    id: '',
-    username: '',
-    email: '',
-    password: '',
-    role: ''
-  });
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [originalEmail, setOriginalEmail] = useState('');
+    const [user, setUser] = useState({
+        id: '',
+        username: '',
+        mail: '',
+        password: '',
+        role: 'EMPLOYEE',
+        active: true,
+        createdDate: '',
+        updatedDate: ''
+    });
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Simulăm preluarea detaliilor utilizatorului de la server
-    const fetchedUser = {
-      id: id,
-      username: `User${id}`,
-      email: `user${id}@example.com`,
-      password: '*******',
-      role: id % 2 === 0 ? 'Employee' : 'Analyst' // Simplă logică pentru simulare
+    useEffect(() => {
+        if (location.state && location.state.user) {
+            setUser(location.state.user);
+            setOriginalEmail(location.state.user.mail);
+        }
+    }, [location.state]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUser(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
-    setUser(fetchedUser);
-  }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post(`http://localhost:8080/api/v1/updateUser/${originalEmail}`, user);
+            alert("User updated successfully!");
+            navigate('/admin/users');
+        } catch (error) {
+            console.error("There was an error updating the user!", error);
+            setError(error.response.data); // Display error message
+        }
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aici veți adăuga logica pentru a trimite datele către backend
-    console.log(user);
-  };
-
-  return (
-    <div className="container mt-4">
-      <h2>Edit User {id}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="userId" className="form-label">ID:</label>
-          <input type="text" className="form-control" id="userId" placeholder="User ID" value={user.id} readOnly />
+    return (
+        <div className="container mt-4">
+            <h2>Edit User</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="id" className="form-label">ID</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="id"
+                        name="id"
+                        value={user.id}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="username"
+                        name="username"
+                        value={user.username}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="mail" className="form-label">Email</label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        id="mail"
+                        name="mail"
+                        value={user.mail}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        name="password"
+                        value={user.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="role" className="form-label">Role</label>
+                    <select
+                        className="form-select"
+                        id="role"
+                        name="role"
+                        value={user.role}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="ADMIN">Admin</option>
+                        <option value="EMPLOYEE">Employee</option>
+                        <option value="ANALYST">Analyst</option>
+                    </select>
+                </div>
+                <div className="mb-3 form-check">
+                    <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id="active"
+                        name="active"
+                        checked={user.active}
+                        onChange={() => setUser(prevState => ({ ...prevState, active: !prevState.active }))}
+                    />
+                    <label className="form-check-label" htmlFor="active">Active</label>
+                </div>
+                <button type="submit" className="btn btn-primary">Update User</button>
+            </form>
         </div>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">Username:</label>
-          <input type="text" className="form-control" id="username" name="username" placeholder="Username" value={user.username} onChange={handleChange} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email:</label>
-          <input type="email" className="form-control" id="email" name="email" placeholder="Email" value={user.email} onChange={handleChange} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password:</label>
-          <input type="password" className="form-control" id="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="role" className="form-label">Role:</label>
-          <select className="form-select" id="role" name="role" value={user.role} onChange={handleChange}>
-            <option value="Analyst">Analyst</option>
-            <option value="Employee">Employee</option>
-          </select>
-        </div>
-        <div className="d-flex justify-content-center">
-          <button type="submit" className="btn btn-success me-2">Save</button>
-          <button type="button" className="btn btn-danger">Delete User</button>
-        </div>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default AdminEditUser;

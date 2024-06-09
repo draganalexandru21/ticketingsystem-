@@ -7,44 +7,48 @@ import './LoginForm.css';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/v1/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mail: email, password }),
-      });
+        const response = await fetch('http://localhost:8080/api/v1/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mail: email, password }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Server response:', errorData);
-        throw new Error('Network response was not ok');
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server response:', errorData);
+            setError('Invalid email or password');
+            return;
+        }
 
-      const data = await response.json();
-      const user = new User(data.id, data.username, data.mail, data.role);
-      const authResponse = new AuthResponse(data.token, user, data.mail, data.role, data.active);
+        const data = await response.json();
+        const user = new User(data.id, data.username, data.mail, data.role);
+        const authResponse = new AuthResponse(data.token, user, data.mail, data.role, data.active);
 
-      localStorage.setItem('token', authResponse.token);
-      localStorage.setItem('role', authResponse.role);
-      const userRole = authResponse.role;
+        localStorage.setItem('token', authResponse.token);
+        localStorage.setItem('role', authResponse.role);
+        const userRole = authResponse.role;
 
-      if (userRole === 'ADMIN') {
-        navigate('/admin/users');
-      } else if (userRole === 'ANALYST') {
-        navigate('/analyst/dashboard');
-      } else if (userRole === 'EMPLOYEE') {
-        navigate('/user/tickets');
-      }
+        if (userRole === 'ADMIN') {
+            navigate('/admin/users');
+        } else if (userRole === 'ANALYST') {
+            navigate('/analyst/dashboard');
+        } else if (userRole === 'EMPLOYEE') {
+            navigate('/user/tickets');
+        }
     } catch (error) {
-      console.error('There was a problem with the login request:', error);
+        console.error('There was a problem with the login request:', error);
+        setError('An error occurred. Please try again.');
     }
-  };
+};
+
 
   return (
     <div className="login-container">
@@ -53,6 +57,7 @@ const LoginForm = () => {
           <h3 className="text-primary">Log in</h3>
         </div>
         <div className="card-body">
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label htmlFor="email"><i className="fas fa-envelope"></i> Email</label>
