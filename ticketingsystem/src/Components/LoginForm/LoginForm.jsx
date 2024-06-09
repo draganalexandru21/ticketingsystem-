@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthResponse from '../../Models/AuthResponse';
+import User from '../../Models/User';
 import './LoginForm.css';
 
 const LoginForm = () => {
@@ -25,9 +27,12 @@ const LoginForm = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.role);
-      const userRole = data.role;
+      const user = new User(data.id, data.username, data.mail, data.role);
+      const authResponse = new AuthResponse(data.token, user, data.mail, data.role, data.active);
+
+      localStorage.setItem('token', authResponse.token);
+      localStorage.setItem('role', authResponse.role);
+      const userRole = authResponse.role;
 
       if (userRole === 'ADMIN') {
         navigate('/admin/users');
