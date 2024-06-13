@@ -1,0 +1,36 @@
+.ticket-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ticket-detail-section {
+    margin-bottom: 1rem;
+}
+
+.detail-label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.detail-text {
+    font-size: 1rem;
+}
+
+.section-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.conversation {
+    width: 100%;
+}
+
+.message-entry {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

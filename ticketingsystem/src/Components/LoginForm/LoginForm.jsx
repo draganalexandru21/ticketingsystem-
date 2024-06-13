@@ -34,6 +34,10 @@ const LoginForm = () => {
 
         localStorage.setItem('token', authResponse.token);
         localStorage.setItem('role', authResponse.role);
+        localStorage.setItem('userId', data.id); // Salvăm id-ul utilizatorului
+        localStorage.setItem('username', data.username); // Salvăm username-ul utilizatorului
+        localStorage.setItem('email', data.mail); // Salvăm email-ul utilizatorului
+
         const userRole = authResponse.role;
 
         if (userRole === 'ADMIN') {
@@ -48,8 +52,6 @@ const LoginForm = () => {
         setError('An error occurred. Please try again.');
     }
 };
-
-
   return (
     <div className="login-container">
       <div className="card login-card">
@@ -92,3 +94,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
