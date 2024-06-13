@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './EmployeeMails.css';
 
 const EmployeeMails = () => {
     const navigate = useNavigate();
+    const [notifications, setNotifications] = useState([]);
 
-    // Simulăm notificările, în practică acestea ar veni de la server
-    const initialNotifications = [
-        { id: 1, ticketId: 1, message: 'Your ticket has been updated', date: '2022-07-15', opened: false },
-        { id: 2, ticketId: 2, message: 'New message from Analyst', date: '2022-07-16', opened: false },
-        { id: 3, ticketId: 3, message: 'Your ticket has been closed', date: '2022-07-17', opened: true },
-    ];
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:8080/api/v1/notifications/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            setNotifications(response.data);
+        };
 
-    const [notifications, setNotifications] = useState(initialNotifications);
+        fetchNotifications();
+    }, []);
 
-    const handleNotificationClick = (notificationId, ticketId) => {
-        // Actualizează starea notificărilor pentru a marca notificarea ca fiind deschisă
+    const handleNotificationClick = async (notificationId, ticketId) => {
+        const token = localStorage.getItem('token');
+        await axios.put(`http://localhost:8080/api/v1/notifications/${notificationId}/read`, {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         setNotifications(notifications.map(notification => 
             notification.id === notificationId ? { ...notification, opened: true } : notification
         ));
-        // Navighează la detaliile tichetului
         navigate(`/user/ticket/${ticketId}`);
     };
 
-    // Sortăm notificările astfel încât cele nedeschise să fie primele
     const sortedNotifications = notifications.sort((a, b) => a.opened - b.opened);
 
     return (
@@ -42,7 +53,7 @@ const EmployeeMails = () => {
                         </div>
                         <div className="card-body">
                             <p className="card-text">{notification.message}</p>
-                            <p className="card-text"><small className="text-muted">Date: {notification.date}</small></p>
+                            <p className="card-text"><small className="text-muted">Date: {notification.createdAt}</small></p>
                         </div>
                     </div>
                 ))}
