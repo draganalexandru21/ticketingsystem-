@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const AnalystInsight = () => {
     const [message, setMessage] = useState('');
     const [selectedAnalyst, setSelectedAnalyst] = useState(null);
+    const [analysts, setAnalysts] = useState([]);
 
-    // Simulăm datele pentru analiști, în practică acestea ar veni de la server
-    const analysts = [
-        { id: 1, name: 'Analyst 1', tickets: 15, activeTickets: 4, email: 'analyst1@example.com', role: 'L1' },
-        { id: 2, name: 'Analyst 2', tickets: 10, activeTickets: 2, email: 'analyst2@example.com', role: 'L2' },
-        { id: 3, name: 'Analyst 3', tickets: 20, activeTickets: 5, email: 'analyst3@example.com', role: 'L3' },
-    ];
+    useEffect(() => {
+        const fetchAnalysts = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/v1/analysts');
+                setAnalysts(response.data);
+            } catch (error) {
+                console.error('There was an error fetching the analysts!', error);
+            }
+        };
+
+        fetchAnalysts();
+    }, []);
 
     const handleContactClick = (analyst) => {
         setSelectedAnalyst(analyst);
     };
 
     const handleSendMessage = () => {
-        console.log(`Mesaj trimis către ${selectedAnalyst.name}: ${message}`);
+        console.log(`Mesaj trimis către ${selectedAnalyst.username}: ${message}`);
         setMessage('');
         setSelectedAnalyst(null);
     };
@@ -46,10 +54,10 @@ const AnalystInsight = () => {
                                 <tbody>
                                     {analysts.map((analyst) => (
                                         <tr key={analyst.id}>
-                                            <td>{analyst.name}</td>
-                                            <td>{analyst.tickets}</td>
+                                            <td>{analyst.username}</td>
+                                            <td>{analyst.totalTickets}</td>
                                             <td>{analyst.activeTickets}</td>
-                                            <td>{analyst.email}</td>
+                                            <td>{analyst.mail}</td>
                                             <td>{analyst.role}</td>
                                             <td>
                                                 <button
@@ -72,7 +80,7 @@ const AnalystInsight = () => {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Trimite un mesaj către {selectedAnalyst.name}</h5>
+                                <h5 className="modal-title">Trimite un mesaj către {selectedAnalyst.username}</h5>
                                 <button
                                     type="button"
                                     className="close"

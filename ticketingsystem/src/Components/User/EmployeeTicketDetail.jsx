@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
@@ -9,15 +9,10 @@ const EmployeeTicketDetail = () => {
     const [ticketDetails, setTicketDetails] = useState(null);
     const [message, setMessage] = useState("");
     const [attachment, setAttachment] = useState(null);
-    const [error, setError] = useState('');
     const [showCloseConfirm, setShowCloseConfirm] = useState(false);
     const [showReopenConfirm, setShowReopenConfirm] = useState(false);
 
-    useEffect(() => {
-        fetchTicketDetails();
-    }, [id]);
-
-    const fetchTicketDetails = async () => {
+    const fetchTicketDetails = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get(`http://localhost:8080/api/v1/tickets/${id}`, {
@@ -28,9 +23,12 @@ const EmployeeTicketDetail = () => {
             setTicketDetails(response.data);
         } catch (error) {
             console.error("There was an error fetching the ticket details!", error);
-            setError('There was an error fetching the ticket details.');
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchTicketDetails();
+    }, [fetchTicketDetails]);
 
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
@@ -62,7 +60,6 @@ const EmployeeTicketDetail = () => {
             fetchTicketDetails();
         } catch (error) {
             console.error("There was an error sending the message!", error);
-            setError('There was an error sending the message.');
         }
     };
 
@@ -89,26 +86,21 @@ const EmployeeTicketDetail = () => {
             fetchTicketDetails();
         } catch (error) {
             console.error("There was an error closing the ticket!", error);
-            setError('There was an error closing the ticket.');
         }
     };
 
     const confirmReopenTicket = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:8080/api/v1/tickets/${id}/status`, null, {
+            await axios.put(`http://localhost:8080/api/v1/tickets/${id}/reopen`, null, {
                 headers: {
                     'Authorization': `Bearer ${token}`
-                },
-                params: {
-                    status: 'OPEN'
                 }
             });
             setShowReopenConfirm(false);
             fetchTicketDetails();
         } catch (error) {
             console.error("There was an error reopening the ticket!", error);
-            setError('There was an error reopening the ticket.');
         }
     };
 
@@ -215,17 +207,7 @@ const EmployeeTicketDetail = () => {
                 <button className="btn btn-secondary" onClick={cancelClose}>No</button>
             </Modal>
 
-            <Modal isOpen={showReopenConfirm} onRequestClose={cancelReopen} contentLabel="Confirm Reopen Ticket" ariaHideApp={false}
-             style={{
-                content: {
-                    top: '50%',
-                    left: '50%',
-                    right: 'auto',
-                    bottom: 'auto',
-                    marginRight: '-50%',
-                    transform: 'translate(-50%, -50%)'
-                }
-            }}>
+            <Modal isOpen={showReopenConfirm} onRequestClose={cancelReopen} contentLabel="Confirm Reopen Ticket" ariaHideApp={false} style={{ content: { top: '50%', left: '50%', right: 'auto', bottom: 'auto', marginRight: '-50%', transform: 'translate(-50%, -50%)' } }}>
                 <h2>Confirm Reopen</h2>
                 <p>Are you sure you want to reopen the ticket: {ticketDetails.title}?</p>
                 <button className="btn btn-warning" onClick={confirmReopenTicket}>Yes</button>

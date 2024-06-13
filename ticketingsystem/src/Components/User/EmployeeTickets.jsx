@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -10,11 +10,7 @@ const EmployeeTickets = () => {
     const [filter, setFilter] = useState('ALL');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchTickets();
-    }, [filter]);
-
-    const fetchTickets = async () => {
+    const fetchTickets = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -47,7 +43,11 @@ const EmployeeTickets = () => {
                 navigate('/login');
             }
         }
-    };
+    }, [filter, navigate]);
+
+    useEffect(() => {
+        fetchTickets();
+    }, [fetchTickets]);
 
     const handleDetail = (ticketId) => {
         navigate(`/user/ticket/${ticketId}`);
@@ -141,6 +141,7 @@ const EmployeeTickets = () => {
                         transform: 'translate(-50%, -50%)'
                     }
                 }}
+                ariaHideApp={false}
             >
                 <h2>Confirm Close</h2>
                 <p>Are you sure you want to close the ticket: {selectedTicket?.title}?</p>

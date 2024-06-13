@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import Modal from 'react-modal';
+import './AnalystTicketDetail.css';
 
 const AnalystTicketDetail = () => {
-    const { id } = useParams(); // ID-ul tichetului din URL
-    const [message, setMessage] = useState(""); // Starea pentru mesajul nou
-    const [attachment, setAttachment] = useState(null); // Starea pentru atașament
+    const { id } = useParams();
+    const [ticketDetails, setTicketDetails] = useState(null);
+    const [message, setMessage] = useState("");
+    const [attachment, setAttachment] = useState(null);
+    const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+    const [showReopenConfirm, setShowReopenConfirm] = useState(false);
 
-    // Simulație de date ale tichetului, în producție acestea ar veni de la server
-    const ticketDetails = {
-        id: id,
-        title: 'Review Ticket 1',
-        owner: 'Employee1',
-        analyst: 'Analyst1',
-        status: 'Deschis',
-        summary: 'Review the ticket for the laptop issue.',
-        dateOpened: '2022-07-14',
-        details: 'Laptop-ul model XYZ nu se aprinde de la buton. Se recomandă verificarea alimentării și a bateriei.',
-        comments: 'Comentarii adiționale: Verifică și cablurile de alimentare.',
-        priority: 3,
-        conversation: [
-            { from: "Employee1", message: "Buna ziua, am o problema cu laptopul.", timestamp: '2022-07-14 10:00', attachment: null },
-            { from: "Analyst1", message: "Buna ziua, am primit mesajul dumneavoastră.", timestamp: '2022-07-14 10:05', attachment: 'report.pdf' },
-            // ... alte mesaje
-        ],
-    };
+    const fetchTicketDetails = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:8080/api/v1/tickets/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setTicketDetails(response.data);
+        } catch (error) {
+            console.error("There was an error fetching the ticket details!", error);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        fetchTicketDetails();
+    }, [fetchTicketDetails]);
 
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
@@ -33,23 +38,87 @@ const AnalystTicketDetail = () => {
         setAttachment(e.target.files[0]);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aici veți adăuga logica de trimitere a mesajului și atașamentului către server
         const formData = new FormData();
-        formData.append('message', message);
+        formData.append('messageContent', message);
+        formData.append('sender', localStorage.getItem('username'));
         if (attachment) {
             formData.append('attachment', attachment);
         }
 
-        console.log("Mesaj trimis: ", message, attachment ? `cu atașament: ${attachment.name}` : "fără atașament");
-        setMessage(""); // Resetați inputul după trimitere
-        setAttachment(null); // Resetați atașamentul după trimitere
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`http://localhost:8080/api/v1/tickets/${id}/conversation`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                },
+            });
+            setMessage("");
+            setAttachment(null);
+            fetchTicketDetails();
+        } catch (error) {
+            console.error("There was an error sending the message!", error);
+        }
+    };
+
+    const handleCloseTicket = () => {
+        setShowCloseConfirm(true);
+    };
+
+    const handleReopenTicket = () => {
+        setShowReopenConfirm(true);
+    };
+
+    const confirmCloseTicket = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:8080/api/v1/tickets/${id}/status`, null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                params: {
+                    status: 'CLOSED'
+                }
+            });
+            setShowCloseConfirm(false);
+            fetchTicketDetails();
+        } catch (error) {
+            console.error("There was an error closing the ticket!", error);
+        }
+    };
+
+    const confirmReopenTicket = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:8080/api/v1/tickets/${id}/reopen`, null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setShowReopenConfirm(false);
+            fetchTicketDetails();
+        } catch (error) {
+            console.error("There was an error reopening the ticket!", error);
+        }
+    };
+
+    const cancelClose = () => {
+        setShowCloseConfirm(false);
+    };
+
+    const cancelReopen = () => {
+        setShowReopenConfirm(false);
     };
 
     const handleHelpClick = () => {
         alert('Ajutorul este pe drum!');
     };
+
+    if (!ticketDetails) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="container mt-4">
@@ -57,31 +126,49 @@ const AnalystTicketDetail = () => {
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <div>Detalii Tichet #{ticketDetails.id}</div>
                     <div>
-                        <span className="badge bg-primary me-2">Proprietar: {ticketDetails.owner}</span>
-                        <span className="badge bg-primary me-2">Analyst: {ticketDetails.analyst}</span>
+                        <span className="badge bg-primary me-2">Proprietar: {ticketDetails.employee ? ticketDetails.employee.username : 'N/A'}</span>
+                        <span className="badge bg-primary me-2">Analyst: {ticketDetails.analyst ? ticketDetails.analyst.username : 'N/A'}</span>
                         <span className="badge bg-primary">Prioritate: {ticketDetails.priority}</span>
                     </div>
                 </div>
                 <div className="card-body">
-                    <h5 className="card-title">{ticketDetails.title}</h5>
-                    <p className="card-text">{ticketDetails.summary}</p>
-                    <p className="card-text">Status: {ticketDetails.status}</p>
-                    <p className="card-text"><strong>Details:</strong> {ticketDetails.details}</p>
-                    <p className="card-text"><strong>Comments:</strong> {ticketDetails.comments}</p>
-                    <p className="card-text"><small className="text-muted">Deschis la: {ticketDetails.dateOpened}</small></p>
+                    <div className="ticket-detail-container">
+                        <div className="ticket-detail-section">
+                            <span className="detail-label">Title:</span>
+                            <span className="detail-text">{ticketDetails.title}</span>
+                        </div>
+                        <div className="ticket-detail-section">
+                            <span className="detail-label">Status:</span>
+                            <span className="detail-text">{ticketDetails.status}</span>
+                        </div>
+                        <div className="ticket-detail-section">
+                            <span className="detail-label">Type:</span>
+                            <span className="detail-text">{ticketDetails.type}</span>
+                        </div>
+                        <div className="ticket-detail-section">
+                            <span className="detail-label">Created At:</span>
+                            <span className="detail-text">{new Date(ticketDetails.createdAt).toLocaleString()}</span>
+                        </div>
+                        <div className="ticket-detail-section">
+                            <span className="detail-label">Details:</span>
+                            <span className="detail-text">{ticketDetails.details}</span>
+                        </div>
+                    </div>
                     <hr />
-                    <h6 className="card-title">Conversație:</h6>
+                    <h6 className="section-header">Conversație:</h6>
                     <div className="conversation">
-                        {ticketDetails.conversation.map((entry, index) => (
+                        {ticketDetails.conversation && ticketDetails.conversation.map((entry, index) => (
                             <div key={index} className="message-entry mb-3">
-                                <strong>{entry.from}:</strong> {entry.message}
-                                <br />
-                                {entry.attachment && 
+                                {entry.startsWith("Attachment: ") ? (
                                     <div>
-                                        <strong>Attachment:</strong> <a href={`/attachments/${entry.attachment}`} target="_blank" rel="noopener noreferrer">{entry.attachment}</a>
+                                        <strong>Attachment:</strong> <a href={`http://localhost:8080/${entry.replace("Attachment: ", "")}`} download>{entry.replace("Attachment: ", "")}</a>
                                     </div>
-                                }
-                                <small className="text-muted">{entry.timestamp}</small>
+                                ) : (
+                                    <div>
+                                        <strong>{entry.split(":")[0]}:</strong> {entry.split(":").slice(1).join(":")}
+                                    </div>
+                                )}
+                                <small className="text-muted">{new Date(ticketDetails.createdAt).toLocaleString()}</small>
                             </div>
                         ))}
                     </div>
@@ -110,8 +197,27 @@ const AnalystTicketDetail = () => {
                         <button type="submit" className="btn btn-outline-primary">Send</button>
                         <button type="button" className="btn btn-outline-secondary ms-2" onClick={handleHelpClick}>Help</button>
                     </form>
+                    {ticketDetails.status === 'CLOSED' ? (
+                        <button className="btn btn-warning mt-3" onClick={handleReopenTicket}>Reopen Ticket</button>
+                    ) : (
+                        <button className="btn btn-danger mt-3" onClick={handleCloseTicket}>Close Ticket</button>
+                    )}
                 </div>
             </div>
+
+            <Modal isOpen={showCloseConfirm} onRequestClose={cancelClose} contentLabel="Confirm Close Ticket" ariaHideApp={false} style={{ content: { top: '50%', left: '50%', right: 'auto', bottom: 'auto', marginRight: '-50%', transform: 'translate(-50%, -50%)' } }}>
+                <h2>Confirm Close</h2>
+                <p>Are you sure you want to close the ticket: {ticketDetails.title}?</p>
+                <button className="btn btn-danger" onClick={confirmCloseTicket}>Yes</button>
+                <button className="btn btn-secondary" onClick={cancelClose}>No</button>
+            </Modal>
+
+            <Modal isOpen={showReopenConfirm} onRequestClose={cancelReopen} contentLabel="Confirm Reopen Ticket" ariaHideApp={false} style={{ content: { top: '50%', left: '50%', right: 'auto', bottom: 'auto', marginRight: '-50%', transform: 'translate(-50%, -50%)' } }}>
+                <h2>Confirm Reopen</h2>
+                <p>Are you sure you want to reopen the ticket: {ticketDetails.title}?</p>
+                <button className="btn btn-warning" onClick={confirmReopenTicket}>Yes</button>
+                <button className="btn btn-secondary" onClick={cancelReopen}>No</button>
+            </Modal>
         </div>
     );
 };
