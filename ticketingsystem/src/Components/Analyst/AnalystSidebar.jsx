@@ -47,6 +47,10 @@ const AnalystSidebar = () => {
           <i className="fas fa-envelope"></i> Mails
           {unreadCount > 0 && <span className="badge badge-danger">{unreadCount}</span>}
         </NavLink>
+        <NavLink to="/analyst/alltickets" className="btn btn-light w-100 mb-3">
+          <i className="fas fa-envelope"></i> All Tickets
+          {unreadCount > 0 && <span className="badge badge-danger">{unreadCount}</span>}
+        </NavLink>
       </div>
 
       <div className="mt-auto p-2">

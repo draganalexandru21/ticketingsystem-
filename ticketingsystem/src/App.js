@@ -18,7 +18,7 @@ import AnalystMails from './Components/Analyst/AnalystMails';
 import EmployeeMails from './Components/User/EmployeeMails';
 import LoginForm from './Components/LoginForm/LoginForm';
 import PrivateRoute from './routes/PrivateRoute';
-
+import AnalystAllTickets from './Components/Analyst/AnalystAllTickets';
 function App() {
   return (
     <Router>
@@ -72,6 +72,7 @@ const AnalystLayout = () => (
         <Route path="ticket/:id" element={<PrivateRoute element={AnalystTicketDetail} allowedRoles={['ANALYST']} />} />
         <Route path="insights" element={<PrivateRoute element={AnalystInsight} allowedRoles={['ANALYST']} />} />
         <Route path="mails" element={<PrivateRoute element={AnalystMails} allowedRoles={['ANALYST']} />} />
+        <Route path="alltickets" element={<PrivateRoute element={AnalystAllTickets} allowedRoles={['ANALYST']} />} />
       </Routes>
     </div>
   </div>
