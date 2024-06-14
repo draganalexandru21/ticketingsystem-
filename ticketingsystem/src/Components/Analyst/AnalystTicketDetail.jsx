@@ -113,9 +113,7 @@ const AnalystTicketDetail = () => {
         setShowReopenConfirm(false);
     };
 
-    const handleHelpClick = () => {
-        alert('Ajutorul este pe drum!');
-    };
+    
 
     if (!ticketDetails) {
         return <div>Loading...</div>;
@@ -196,7 +194,6 @@ const AnalystTicketDetail = () => {
                             />
                         </div>
                         <button type="submit" className="btn btn-outline-primary">Send</button>
-                        <button type="button" className="btn btn-outline-secondary ms-2" onClick={handleHelpClick}>Help</button>
                     </form>
                     {ticketDetails.status === 'CLOSED' ? (
                         <button className="btn btn-warning mt-3" onClick={handleReopenTicket}>Reopen Ticket</button>

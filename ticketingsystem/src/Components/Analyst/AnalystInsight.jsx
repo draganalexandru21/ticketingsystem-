@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const AnalystInsight = () => {
     const [message, setMessage] = useState('');
+    const [ticketId, setTicketId] = useState('');
     const [selectedAnalyst, setSelectedAnalyst] = useState(null);
     const [analysts, setAnalysts] = useState([]);
 
@@ -24,10 +25,27 @@ const AnalystInsight = () => {
         setSelectedAnalyst(analyst);
     };
 
-    const handleSendMessage = () => {
-        console.log(`Mesaj trimis către ${selectedAnalyst.username}: ${message}`);
-        setMessage('');
-        setSelectedAnalyst(null);
+    const handleSendMessage = async () => {
+        if (!selectedAnalyst) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`http://localhost:8080/api/v1/notifications/send`, null, {
+                params: {
+                    analystId: selectedAnalyst.id,
+                    message: message,
+                    ticketId: ticketId // Include ticketId in the params
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setMessage('');
+            setTicketId('');
+            setSelectedAnalyst(null);
+        } catch (error) {
+            console.error('There was an error sending the message!', error);
+        }
     };
 
     return (
@@ -96,6 +114,13 @@ const AnalystInsight = () => {
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Scrie mesajul tău aici..."
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control mt-2"
+                                    value={ticketId}
+                                    onChange={(e) => setTicketId(e.target.value)}
+                                    placeholder="Ticket ID (optional)"
                                 />
                             </div>
                             <div className="modal-footer">
