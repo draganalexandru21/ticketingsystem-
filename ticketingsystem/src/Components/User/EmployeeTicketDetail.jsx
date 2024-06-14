@@ -42,11 +42,11 @@ const EmployeeTicketDetail = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('messageContent', message);
-        formData.append('sender', localStorage.getItem('username'));
+        formData.append('sender', localStorage.getItem('email')); 
         if (attachment) {
             formData.append('attachment', attachment);
         }
-
+    
         try {
             const token = localStorage.getItem('token');
             await axios.post(`http://localhost:8080/api/v1/tickets/${id}/conversation`, formData, {
@@ -62,6 +62,7 @@ const EmployeeTicketDetail = () => {
             console.error("There was an error sending the message!", error);
         }
     };
+    
 
     const handleCloseTicket = () => {
         setShowCloseConfirm(true);

@@ -8,18 +8,18 @@ const AnalystSidebar = () => {
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    const fetchUnreadNotifications = async () => {
-      const userId = localStorage.getItem('userId');
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8080/api/v1/notifications/unread/${userId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      setUnreadCount(response.data.length);
-    };
+  const fetchUnreadNotifications = async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`http://localhost:8080/api/v1/notifications/unread/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    setUnreadCount(response.data.length);
+  };
 
+  useEffect(() => {
     fetchUnreadNotifications();
   }, []);
 

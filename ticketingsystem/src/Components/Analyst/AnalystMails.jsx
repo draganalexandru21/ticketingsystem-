@@ -31,13 +31,14 @@ const AnalystMails = () => {
             },
         });
 
-        // Update the notifications state to reflect the read status
+        // Update the notifications state to mark the clicked notification as opened
         setNotifications(notifications.map(notification => 
             notification.id === notificationId ? { ...notification, opened: true } : notification
         ));
 
         // Navigate to the ticket details
         navigate(`/analyst/ticket/${ticketId}`);
+        window.location.reload();
     };
 
     // Sort notifications so that unread ones are displayed first
@@ -50,7 +51,7 @@ const AnalystMails = () => {
                 {sortedNotifications.map((notification) => (
                     <div 
                         key={notification.id} 
-                        className={`card mb-3 ${notification.opened ? 'opened' : 'not-opened'}`} 
+                        className={`card mb-3 ${notification.opened ? '' : 'bg-warning'}`} 
                         onClick={() => handleNotificationClick(notification.id, notification.ticketId)}
                         style={{ cursor: 'pointer' }}
                     >
@@ -59,7 +60,7 @@ const AnalystMails = () => {
                         </div>
                         <div className="card-body">
                             <p className="card-text">{notification.message}</p>
-                            <p className="card-text"><small className="text-muted">Date: {notification.createdAt}</small></p>
+                            <p className="card-text"><small className="text-muted">Date: {new Date(notification.createdAt).toLocaleString()}</small></p>
                         </div>
                     </div>
                 ))}

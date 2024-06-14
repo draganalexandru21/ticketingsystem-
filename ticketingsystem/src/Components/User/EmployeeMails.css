@@ -1,11 +1,11 @@
-.not-opened {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
+.bg-warning {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
 }
 
-.opened {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
+.bg-light {
+    background-color: #d4edda !important;
+    border-color: #c3e6cb !important;
 }
 
 .card {

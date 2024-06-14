@@ -29,10 +29,15 @@ const EmployeeMails = () => {
                 'Authorization': `Bearer ${token}`,
             },
         });
+
+        // Update the notifications state to reflect the read status
         setNotifications(notifications.map(notification => 
             notification.id === notificationId ? { ...notification, opened: true } : notification
         ));
+
+        // Navigate to the ticket details
         navigate(`/user/ticket/${ticketId}`);
+        window.location.reload();
     };
 
     const sortedNotifications = notifications.sort((a, b) => a.opened - b.opened);
@@ -44,7 +49,7 @@ const EmployeeMails = () => {
                 {sortedNotifications.map((notification) => (
                     <div 
                         key={notification.id} 
-                        className={`card mb-3 ${notification.opened ? 'opened' : 'not-opened'}`} 
+                        className={`card mb-3 ${notification.opened ? 'bg-light' : 'bg-warning'}`} 
                         onClick={() => handleNotificationClick(notification.id, notification.ticketId)}
                         style={{ cursor: 'pointer' }}
                     >
@@ -53,7 +58,7 @@ const EmployeeMails = () => {
                         </div>
                         <div className="card-body">
                             <p className="card-text">{notification.message}</p>
-                            <p className="card-text"><small className="text-muted">Date: {notification.createdAt}</small></p>
+                            <p className="card-text"><small className="text-muted">Date: {new Date(notification.createdAt).toLocaleString()}</small></p>
                         </div>
                     </div>
                 ))}
