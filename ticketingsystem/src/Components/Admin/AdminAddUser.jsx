@@ -9,6 +9,7 @@ const AdminAddUser = () => {
     active: true
   });
   const [error, setError] = useState(''); // Adăugăm starea pentru eroare
+  const [successMessage, setSuccessMessage] = useState(''); // Stare pentru mesajul de succes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,20 +31,24 @@ const AdminAddUser = () => {
         console.log('User added successfully');
         setUser({ username: '', mail: '', password: '', role: 'EMPLOYEE', active: true });
         setError(''); // Resetăm mesajul de eroare după succes
+        setSuccessMessage('User added successfully!'); // Setăm mesajul de succes
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to add user');
+        setSuccessMessage(''); // Resetăm mesajul de succes în caz de eroare
       }
     } catch (error) {
       console.error('Error:', error);
       setError('An error occurred');
+      setSuccessMessage(''); 
     }
   };
 
   return (
     <div className="container mt-4">
       <h2>Add New User</h2>
-      {error && <div className="alert alert-danger">{error}</div>} {/* Afișăm mesajul de eroare */}
+      {error && <div className="alert alert-danger">{error}</div>} {}
+      {successMessage && <div className="alert alert-success">{successMessage}</div>} {}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="username" className="form-label">Username:</label>

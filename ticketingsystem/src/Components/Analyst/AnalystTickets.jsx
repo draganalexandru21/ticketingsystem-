@@ -88,7 +88,7 @@ const AnalystTickets = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Analyst Tickets</h2>
+            <h2>My Tickets</h2>
             {error && <div className="alert alert-danger">{error}</div>}
 
             <div className="mb-3">
@@ -104,17 +104,17 @@ const AnalystTickets = () => {
                 {tickets.map((ticket) => (
                     <div key={ticket.id} className="card mb-3">
                         <div className="card-header d-flex justify-content-between align-items-center">
-                            <div>Tichet #{ticket.id} - {ticket.status}</div>
+                            <div>Ticket #{ticket.id} - {ticket.status}</div>
                             <div>
-                                <span className="badge bg-primary me-2">Proprietar: {ticket.employee.username}</span>
+                                <span className="badge bg-primary me-2">Owner: {ticket.employee.username}</span>
                                 <span className="badge bg-primary me-2">Analyst: {ticket.analyst ? ticket.analyst.username : 'N/A'}</span>
-                                <span className="badge bg-primary">Prioritate: {ticket.priority}</span>
+                                <span className="badge bg-primary">Priority: {ticket.priority}</span>
                             </div>
                         </div>
                         <div className="card-body">
                             <h5 className="card-title">{ticket.title}</h5>
                             <p className="card-text">{ticket.details}</p>
-                            <p className="card-text"><small className="text-muted">Deschis la: {new Date(ticket.createdAt).toLocaleString()}</small></p>
+                            <p className="card-text"><small className="text-muted">Opened at: {new Date(ticket.createdAt).toLocaleString()}</small></p>
                             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <button className="btn btn-outline-info me-md-2" type="button" onClick={() => handleDetail(ticket.id)}>Info</button>
                                 {ticket.status !== 'CLOSED' && (
@@ -137,7 +137,14 @@ const AnalystTickets = () => {
                         right: 'auto',
                         bottom: 'auto',
                         marginRight: '-50%',
-                        transform: 'translate(-50%, -50%)'
+                        transform: 'translate(-50%, -50%)',
+                        width: '400px',
+                        height: 'auto',
+                        padding: '20px',
+                        borderRadius: '8px'
+                    },
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)'
                     }
                 }}
                 ariaHideApp={false}

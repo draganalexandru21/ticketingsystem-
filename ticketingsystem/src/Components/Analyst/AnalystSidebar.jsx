@@ -35,7 +35,7 @@ const AnalystSidebar = () => {
 
       <div className="my-auto">
         <NavLink to="/analyst/tickets" className="btn btn-light w-100 mb-3">
-          <i className="fas fa-ticket-alt"></i> Tickets
+          <i className="fas fa-ticket-alt"></i> My Tickets
         </NavLink>
         <NavLink to="/analyst/dashboard" className="btn btn-light w-100 mb-3">
           <i className="fas fa-tachometer-alt"></i> Dashboard
@@ -48,8 +48,7 @@ const AnalystSidebar = () => {
           {unreadCount > 0 && <span className="badge badge-danger">{unreadCount}</span>}
         </NavLink>
         <NavLink to="/analyst/alltickets" className="btn btn-light w-100 mb-3">
-          <i className="fas fa-envelope"></i> All Tickets
-          {unreadCount > 0 && <span className="badge badge-danger">{unreadCount}</span>}
+          <i className="fas fa-ticket-alt"></i>All Tickets
         </NavLink>
       </div>
 

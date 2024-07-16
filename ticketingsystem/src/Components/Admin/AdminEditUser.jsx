@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+
 const AdminEditUser = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -16,7 +17,8 @@ const AdminEditUser = () => {
         createdDate: '',
         updatedDate: ''
     });
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         if (location.state && location.state.user) {
@@ -37,18 +39,22 @@ const AdminEditUser = () => {
         e.preventDefault();
         try {
             await axios.post(`http://localhost:8080/api/v1/updateUser/${originalEmail}`, user);
-            alert("User updated successfully!");
-            navigate('/admin/users');
+            setMessage("User updated successfully!");
+            setIsError(false);
+            setTimeout(() => navigate('/admin/users'), 2000); 
         } catch (error) {
             console.error("There was an error updating the user!", error);
-            setError(error.response.data); // Display error message
+            setMessage(error.response.data || "Error updating the user!");
+            setIsError(true);
         }
     };
 
     return (
         <div className="container mt-4">
             <h2>Edit User</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
+            {message && (
+                <div className={`alert ${isError ? 'alert-danger' : 'alert-success'}`}>{message}</div>
+            )}
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="id" className="form-label">ID</label>
@@ -113,17 +119,7 @@ const AdminEditUser = () => {
                         <option value="ANALYST">Analyst</option>
                     </select>
                 </div>
-                <div className="mb-3 form-check">
-                    <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="active"
-                        name="active"
-                        checked={user.active}
-                        onChange={() => setUser(prevState => ({ ...prevState, active: !prevState.active }))}
-                    />
-                    <label className="form-check-label" htmlFor="active">Active</label>
-                </div>
+              
                 <button type="submit" className="btn btn-primary">Update User</button>
             </form>
         </div>

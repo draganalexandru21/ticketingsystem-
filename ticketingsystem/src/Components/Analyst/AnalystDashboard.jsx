@@ -41,14 +41,14 @@ const AnalystDashboard = () => {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [
             {
-                label: 'Tichete Deschise',
+                label: 'Open Tickets',
                 data: [30, 20, 40, 35, 50, 55, 60, 70, 65, 75, 80, 90], // Replace with actual data
                 fill: false,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
             },
             {
-                label: 'Tichete Inchise',
+                label: 'Closed Tickets',
                 data: [25, 15, 30, 28, 45, 50, 55, 60, 60, 70, 75, 85], // Replace with actual data
                 fill: false,
                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
@@ -58,7 +58,7 @@ const AnalystDashboard = () => {
     };
 
     const ticketStatusDistribution = {
-        labels: ['Deschise', 'Inchise'],
+        labels: ['Open', 'Closed'],
         datasets: [
             {
                 data: [openTickets, closedTickets],
@@ -80,7 +80,7 @@ const AnalystDashboard = () => {
             <div className="row mb-4">
                 <div className="col-md-4 mb-3">
                     <div className="card bg-light shadow-sm">
-                        <div className="card-header">Tichete Deschise</div>
+                        <div className="card-header">Open Tickets</div>
                         <div className="card-body">
                             <h5 className="card-title">{openTickets}</h5>
                         </div>
@@ -88,7 +88,7 @@ const AnalystDashboard = () => {
                 </div>
                 <div className="col-md-4 mb-3">
                     <div className="card bg-light shadow-sm">
-                        <div className="card-header">Tichete Inchise</div>
+                        <div className="card-header">Closed Tickets</div>
                         <div className="card-body">
                             <h5 className="card-title">{closedTickets}</h5>
                         </div>
@@ -96,7 +96,7 @@ const AnalystDashboard = () => {
                 </div>
                 <div className="col-md-4 mb-3">
                     <div className="card bg-light shadow-sm">
-                        <div className="card-header">Total Tichete</div>
+                        <div className="card-header">Total Tickets</div>
                         <div className="card-body">
                             <h5 className="card-title">{totalTickets}</h5>
                         </div>
@@ -107,7 +107,7 @@ const AnalystDashboard = () => {
                 <div className="col-md-6 mb-3">
                     <div className="card shadow-sm" style={{ height: '400px' }}>
                         <div className="card-header">
-                            Trendul Tichetelor pe Luni
+                            Ticket Trends by Month
                         </div>
                         <div className="card-body">
                             <Line data={ticketsByMonth} options={chartOptions} />
@@ -117,7 +117,7 @@ const AnalystDashboard = () => {
                 <div className="col-md-6 mb-3">
                     <div className="card shadow-sm" style={{ height: '400px' }}>
                         <div className="card-header">
-                            Distribuția Statusurilor Tichetelor
+                            Ticket Status Distribution
                         </div>
                         <div className="card-body">
                             <Doughnut data={ticketStatusDistribution} options={chartOptions} />
@@ -129,14 +129,14 @@ const AnalystDashboard = () => {
                 <div className="col-md-12">
                     <div className="card shadow-sm">
                         <div className="card-header">
-                            Statistici Detaliate
+                            Detailed Statistics
                         </div>
                         <div className="card-body">
                             <ul className="list-unstyled">
-                                <li>Total Tichete: {totalTickets}</li>
-                                <li>Tichete Deschise: {openTickets}</li>
-                                <li>Tichete Inchise: {closedTickets}</li>
-                                <li>Rata de Rezolvare: {solveRate}%</li>
+                                <li>Total Tickets: {totalTickets}</li>
+                                <li>Open Tickets: {openTickets}</li>
+                                <li>Closed Tickets: {closedTickets}</li>
+                                <li>Solve Rate: {solveRate}%</li>
                             </ul>
                         </div>
                     </div>

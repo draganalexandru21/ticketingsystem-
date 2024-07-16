@@ -55,18 +55,18 @@ const AnalystInsight = () => {
                 <div className="col-md-12">
                     <div className="card shadow-sm">
                         <div className="card-header">
-                            Tichete pe Analiști
+                            Analysts Tickets 
                         </div>
                         <div className="card-body">
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th>Nume</th>
-                                        <th>Număr Tichete</th>
-                                        <th>Tichete Active</th>
+                                    <th>Name</th>
+                                        <th>All Tickets</th>
+                                        <th>Active Tickets</th>
                                         <th>Email</th>
-                                        <th>Rol</th>
-                                        <th>Acțiuni</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -98,7 +98,7 @@ const AnalystInsight = () => {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Trimite un mesaj către {selectedAnalyst.username}</h5>
+                                <h5 className="modal-title">Send a message to {selectedAnalyst.username}</h5>
                                 <button
                                     type="button"
                                     className="close"
@@ -113,7 +113,7 @@ const AnalystInsight = () => {
                                     rows="4"
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
-                                    placeholder="Scrie mesajul tău aici..."
+                                    placeholder="Write your message here..."
                                 />
                                 <input
                                     type="text"
@@ -129,14 +129,14 @@ const AnalystInsight = () => {
                                     className="btn btn-secondary"
                                     onClick={() => setSelectedAnalyst(null)}
                                 >
-                                    Închide
+                                    Close
                                 </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
                                     onClick={handleSendMessage}
                                 >
-                                    Trimite
+                                    Send
                                 </button>
                             </div>
                         </div>

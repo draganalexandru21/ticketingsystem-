@@ -34,9 +34,9 @@ const LoginForm = () => {
 
         localStorage.setItem('token', authResponse.token);
         localStorage.setItem('role', authResponse.role);
-        localStorage.setItem('userId', data.id); // Salvăm id-ul utilizatorului
-        localStorage.setItem('username', data.username); // Salvăm username-ul utilizatorului
-        localStorage.setItem('email', data.mail); // Salvăm email-ul utilizatorului
+        localStorage.setItem('userId', data.id); 
+        localStorage.setItem('username', data.username); 
+        localStorage.setItem('email', data.mail); 
 
         const userRole = authResponse.role;
 

@@ -15,7 +15,7 @@ const AdminManageUsers = () => {
                     return;
                 }
 
-                console.log("Sending JWT Token: ", token); // Log the token being sent
+                console.log("Sending JWT Token: ", token); 
 
                 const response = await axios.get('http://localhost:8080/api/v1/users', {
                     headers: {
@@ -68,7 +68,6 @@ const AdminManageUsers = () => {
                         <th>Username</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Active</th>
                         <th>Created At</th>
                         <th>Updated At</th>
                         <th>Actions</th>
@@ -81,7 +80,6 @@ const AdminManageUsers = () => {
                             <td>{user.username}</td>
                             <td>{user.mail}</td>
                             <td>{user.role}</td>
-                            <td>{user.active ? "Yes" : "No"}</td>
                             <td>{formatDate(user.createdDate)}</td>
                             <td>{formatDate(user.updatedDate)}</td>
                             <td>

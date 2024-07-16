@@ -34,3 +34,36 @@
     flex-direction: column;
     align-items: flex-start;
 }
+/* AnalystTicketDetail.css */
+
+/* Stiluri pentru modalul de ajutor */
+.ReactModal__Content {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    bottom: auto;
+    left: auto;
+    width: 300px;
+    height: 400px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    outline: none;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.help-content {
+    margin-top: 30px;
+    max-height: 300px;
+    overflow-y: auto;
+}
